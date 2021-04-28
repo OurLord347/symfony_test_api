@@ -1,94 +1,117 @@
 <?php
+
 namespace App\Entity;
+
+use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-//Данные о пассажире
+use Symfony\Component\Security\Core\User\UserInterface;
+
 /**
- * @ORM\Entity
- * @ORM\Table(name="user")
- * @ORM\HasLifecycleCallbacks()
+ * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User implements \JsonSerializable {
+class User implements UserInterface
+{
     /**
-     * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
     private $id;
-    /**
-     * @ORM\Column(type="string", length=100)
-     *
-     */
-    private $name;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $create_date;
+    private $email;
 
     /**
-     * @return mixed
+     * @ORM\Column(type="json")
      */
-    public function getId()
+    private $roles = [];
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
+     */
+    private $password;
+
+    public function getId(): ?int
     {
         return $this->id;
     }
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
+
+    public function getEmail(): ?string
     {
-        $this->id = $id;
+        return $this->email;
     }
-    /**
-     * @return mixed
-     */
-    public function getName()
+
+    public function setEmail(string $email): self
     {
-        return $this->name;
-    }
-    /**
-     * @param mixed $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-    /**
-     * @return mixed
-     */
-    public function getCreateDate(): ?\DateTime
-    {
-        return $this->create_date;
-    }
-    /**
-     * @param \DateTime $create_date
-     * @return User
-     */
-    public function setCreateDate(\DateTime $create_date): self
-    {
-        $this->create_date = $create_date;
+        $this->email = $email;
+
         return $this;
     }
-    /**
-     * @throws \Exception
-     * @ORM\PrePersist()
-     */
-    public function beforeSave(){
 
-        $this->create_date = new \DateTime('now', new \DateTimeZone('Africa/Casablanca'));
-    }
     /**
-     * Specify data which should be serialized to JSON
-     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
      */
-    public function jsonSerialize()
+    public function getUsername(): string
     {
-        return [
-            "name" => $this->getName(),
-        ];
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 }
