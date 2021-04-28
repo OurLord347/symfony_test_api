@@ -6,7 +6,7 @@ use App\Entity\Payment;
 use App\Entity\Plain;
 use App\Entity\Tickets;
 use App\Entity\User;
-use App\Repository\PostRepository;
+//use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,147 +20,147 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class TicketsController extends AbstractController
 {
-    /**
-     * @param PostRepository $postRepository
-     * @return JsonResponse
-     * @Route("/tickets", name="tickets", methods={"GET"})
-     */
-    public function getTickets(PostRepository $postRepository){
-        $data = $postRepository->findAll();
-        return $this->response($data);
-    }
-
-    /**
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @param PostRepository $postRepository
-     * @return JsonResponse
-     * @throws \Exception
-     * @Route("/tickets", name="tickets_add", methods={"POST"})
-     */
-    public function addPost(Request $request, EntityManagerInterface $entityManager, PostRepository $postRepository){
-
-        try{
-            $request = $this->transformJsonBody($request);
-
-            if (!$request || !$request->get('name') || !$request->request->get('description')){
-                throw new \Exception();
-            }
-
-//            $post = new Tickets();
-//            $post->setName($request->get('name'));
-//            $post->setDescription($request->get('description'));
-//            $entityManager->persist($post);
+//    /**
+//     * @param PostRepository $postRepository
+//     * @return JsonResponse
+//     * @Route("/tickets", name="tickets", methods={"GET"})
+//     */
+//    public function getTickets(PostRepository $postRepository){
+//        $data = $postRepository->findAll();
+//        return $this->response($data);
+//    }
+//
+//    /**
+//     * @param Request $request
+//     * @param EntityManagerInterface $entityManager
+//     * @param PostRepository $postRepository
+//     * @return JsonResponse
+//     * @throws \Exception
+//     * @Route("/tickets", name="tickets_add", methods={"POST"})
+//     */
+//    public function addPost(Request $request, EntityManagerInterface $entityManager, PostRepository $postRepository){
+//
+//        try{
+//            $request = $this->transformJsonBody($request);
+//
+//            if (!$request || !$request->get('name') || !$request->request->get('description')){
+//                throw new \Exception();
+//            }
+//
+////            $post = new Tickets();
+////            $post->setName($request->get('name'));
+////            $post->setDescription($request->get('description'));
+////            $entityManager->persist($post);
+////            $entityManager->flush();
+//
+//            $data = [
+//                'status' => 200,
+//                'success' => "Tickets added successfully",
+//            ];
+//            return $this->response($data);
+//
+//        }catch (\Exception $e){
+//            $data = [
+//                'status' => 422,
+//                'errors' => "Data no valid",
+//            ];
+//            return $this->response($data, 422);
+//        }
+//
+//    }
+//
+//    /**
+//     * @param PostRepository $postRepository
+//     * @param $id
+//     * @return JsonResponse
+//     * @Route("/tickets/{id}", name="tickets_get", methods={"GET"})
+//     */
+//    public function getPost(PostRepository $postRepository, $id){
+//        $post = $postRepository->find($id);
+//
+//        if (!$post){
+//            $data = [
+//                'status' => 404,
+//                'errors' => "Post not found",
+//            ];
+//            return $this->response($data, 404);
+//        }
+//        return $this->response($post);
+//    }
+//
+//    /**
+//     * @param Request $request
+//     * @param EntityManagerInterface $entityManager
+//     * @param PostRepository $postRepository
+//     * @param $id
+//     * @return JsonResponse
+//     * @Route("/tickets/{id}", name="tickets_put", methods={"PUT"})
+//     */
+//    public function updatePost(Request $request, EntityManagerInterface $entityManager, PostRepository $postRepository, $id){
+//
+//        try{
+//            $ticket = $postRepository->find($id);
+//
+//            if (!$ticket){
+//                $data = [
+//                    'status' => 404,
+//                    'errors' => "Post not found",
+//                ];
+//                return $this->response($data, 404);
+//            }
+//
+//            $request = $this->transformJsonBody($request);
+//
+//            if (!$request || !$request->get('name') || !$request->request->get('description')){
+//                throw new \Exception();
+//            }
+//
+////            $ticket->setName($request->get('name'));
+////            $ticket->setDescription($request->get('description'));
+//
 //            $entityManager->flush();
-
-            $data = [
-                'status' => 200,
-                'success' => "Tickets added successfully",
-            ];
-            return $this->response($data);
-
-        }catch (\Exception $e){
-            $data = [
-                'status' => 422,
-                'errors' => "Data no valid",
-            ];
-            return $this->response($data, 422);
-        }
-
-    }
-
-    /**
-     * @param PostRepository $postRepository
-     * @param $id
-     * @return JsonResponse
-     * @Route("/tickets/{id}", name="tickets_get", methods={"GET"})
-     */
-    public function getPost(PostRepository $postRepository, $id){
-        $post = $postRepository->find($id);
-
-        if (!$post){
-            $data = [
-                'status' => 404,
-                'errors' => "Post not found",
-            ];
-            return $this->response($data, 404);
-        }
-        return $this->response($post);
-    }
-
-    /**
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @param PostRepository $postRepository
-     * @param $id
-     * @return JsonResponse
-     * @Route("/tickets/{id}", name="tickets_put", methods={"PUT"})
-     */
-    public function updatePost(Request $request, EntityManagerInterface $entityManager, PostRepository $postRepository, $id){
-
-        try{
-            $ticket = $postRepository->find($id);
-
-            if (!$ticket){
-                $data = [
-                    'status' => 404,
-                    'errors' => "Post not found",
-                ];
-                return $this->response($data, 404);
-            }
-
-            $request = $this->transformJsonBody($request);
-
-            if (!$request || !$request->get('name') || !$request->request->get('description')){
-                throw new \Exception();
-            }
-
-//            $ticket->setName($request->get('name'));
-//            $ticket->setDescription($request->get('description'));
-
-            $entityManager->flush();
-
-            $data = [
-                'status' => 200,
-                'errors' => "Post updated successfully",
-            ];
-            return $this->response($data);
-
-        }catch (\Exception $e){
-            $data = [
-                'status' => 422,
-                'errors' => "Data no valid",
-            ];
-            return $this->response($data, 422);
-        }
-
-    }
-
-    /**
-     * @param PostRepository $postRepository
-     * @param $id
-     * @return JsonResponse
-     * @Route("/tickets/{id}", name="tickets_delete", methods={"DELETE"})
-     */
-    public function deletePost(EntityManagerInterface $entityManager, PostRepository $postRepository, $id){
-        $ticket = $postRepository->find($id);
-
-        if (!$ticket){
-            $data = [
-                'status' => 404,
-                'errors' => "Post not found",
-            ];
-            return $this->response($data, 404);
-        }
-
-        $entityManager->remove($ticket);
-        $entityManager->flush();
-        $data = [
-            'status' => 200,
-            'errors' => "Post deleted successfully",
-        ];
-        return $this->response($data);
-    }
+//
+//            $data = [
+//                'status' => 200,
+//                'errors' => "Post updated successfully",
+//            ];
+//            return $this->response($data);
+//
+//        }catch (\Exception $e){
+//            $data = [
+//                'status' => 422,
+//                'errors' => "Data no valid",
+//            ];
+//            return $this->response($data, 422);
+//        }
+//
+//    }
+//
+//    /**
+//     * @param PostRepository $postRepository
+//     * @param $id
+//     * @return JsonResponse
+//     * @Route("/tickets/{id}", name="tickets_delete", methods={"DELETE"})
+//     */
+//    public function deletePost(EntityManagerInterface $entityManager, PostRepository $postRepository, $id){
+//        $ticket = $postRepository->find($id);
+//
+//        if (!$ticket){
+//            $data = [
+//                'status' => 404,
+//                'errors' => "Post not found",
+//            ];
+//            return $this->response($data, 404);
+//        }
+//
+//        $entityManager->remove($ticket);
+//        $entityManager->flush();
+//        $data = [
+//            'status' => 200,
+//            'errors' => "Post deleted successfully",
+//        ];
+//        return $this->response($data);
+//    }
 
     /**
      * Returns a JSON response
